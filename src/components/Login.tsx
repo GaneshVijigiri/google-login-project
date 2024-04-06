@@ -13,6 +13,7 @@ import {
 import * as Yup from "yup";
 import { ErrorMessage, Form, Formik, FormikHelpers } from "formik";
 import GoogleLogin from "./Glogin";
+import Profile from "./Profile";
 
 interface User {
   email: string;
@@ -32,14 +33,19 @@ const validate = Yup.object({
 
 const Login = () => {
   const [userObject, setUserObject] = useState<any>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleUserLogin = (userObject: any) => {
+    setIsLoggedIn(true);
+  };
+
+  const handleUserLogout = () => {
+    setIsLoggedIn(false);
+  };
 
   const onSubmit = (values: User, { resetForm }: FormikHelpers<User>) => {
     alert(values);
     resetForm();
-  };
-
-  const handleUserLogin = (user: any) => {
-    setUserObject(user);
   };
 
   return (
@@ -100,17 +106,10 @@ const Login = () => {
             )}
           </Formik>
           <Divider>OR</Divider>
-          <GoogleLogin onUserLogin={handleUserLogin} />
+          <GoogleLogin onUserLogin={handleUserLogin} onUserLogout={handleUserLogout} />
         </Box>
       </Paper>
-      {userObject && (
-        <div>
-          <h2>User Details</h2>
-          <p>Name: {userObject.name}</p>
-          <p>Mail: {userObject.email}</p>
-          <img src={userObject.picture} />
-        </div>
-      )}
+      {userObject && <Profile user={userObject} />}
     </>
   );
 };
