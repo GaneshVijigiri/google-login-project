@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import { GoogleLogin, CredentialResponse } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
+import Profile from "./Profile";
+import { Box } from "@mui/material";
 
 interface GloginProps {
   onUserLogin: (userObject: any) => void;
@@ -34,15 +36,18 @@ const Glogin: React.FC<GloginProps> = ({ onUserLogin, onUserLogout }) => {
   const handleLogout = () => {
     setUserObject(null);
     setLoggedIn(false);
-    
-    onUserLogout(); 
+
+    onUserLogout();
   };
 
   return (
     <>
       <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
         {loggedIn ? (
-          <button onClick={handleLogout}>Logout</button>
+          <Box sx={{display: 'flex', flexDirection: 'column'}}>
+          <Profile user={userObject} />
+            <button onClick={handleLogout}>Logout</button>
+          </Box>
         ) : (
           <GoogleLogin
             text="continue_with"
